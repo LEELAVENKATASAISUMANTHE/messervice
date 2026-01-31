@@ -6,11 +6,11 @@ import tokenRoutes from "./routes/token.routes.js";
 app.use("/notify", tokenRoutes);
 
 // optional health/root routes
-app.get("/", (req, res) => {
+app.get("/notify", (req, res) => {
   res.send("Notification Service is up and running!");
 });
 
-app.get("/health", (req, res) => {
+app.get("/notify/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
