@@ -1,9 +1,6 @@
-import express from "express";
+import app from "./app.js";
 import tokenRoutes from "./routes/token.routes.js";
 
-const app = express();
-
-app.use(express.json());
 
 // 🔑 THIS LINE IS REQUIRED
 app.use("/notify", tokenRoutes);
@@ -17,4 +14,7 @@ app.get("/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
+app.listen(4000, () => {
+  console.log("Notification Service listening on port 4000");
+});
 export default app;
