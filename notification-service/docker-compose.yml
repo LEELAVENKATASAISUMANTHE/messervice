@@ -5,10 +5,11 @@ services:
     image: redis:7
     container_name: notification-redis
     ports:
-      - "6379:6379"
+      - "6379:6379"   # ⚠️ expose only if needed externally
     volumes:
       - redis-data:/data
     command: ["redis-server", "--appendonly", "yes"]
+    restart: unless-stopped
 
   backend:
     build: .
@@ -26,9 +27,10 @@ services:
     image: redis/redisinsight:latest
     container_name: redisinsight
     ports:
-      - "8001:8001"
+      - "8001:5540"   # ✅ FIXED
     depends_on:
       - redis
+    restart: unless-stopped
 
 volumes:
   redis-data:
