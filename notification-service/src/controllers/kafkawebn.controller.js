@@ -19,7 +19,7 @@ export const sendMessage = async () => {
         key: "user-1",
         value: JSON.stringify({
           userId: 1,
-          message: "Hello Kafka 🚀",
+          message: "Hello Kafka",
         }),
       },
     ],
