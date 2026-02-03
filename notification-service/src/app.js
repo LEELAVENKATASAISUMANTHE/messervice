@@ -6,7 +6,6 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/', webnotificationroutes);
 
 // Sample route for sending notifications
 export default app;
