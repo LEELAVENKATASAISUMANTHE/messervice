@@ -1,10 +1,57 @@
 import express from "express";
+import rateLimit from "express-rate-limit";
 import {
   startKafkaProducer,
   sendNotification,
 } from "../controllers/kafkawebn.controller.js";
 
 const router = express.Router();
+
+// Rate limiting middleware
+const notificationLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: {
+    error: "Too many notification requests, please try again later"
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Input validation middleware
+const validateNotificationInput = (req, res, next) => {
+  const { tokens, title, body } = req.body;
+  
+  if (!tokens || !Array.isArray(tokens) || tokens.length === 0) {
+    return res.status(400).json({
+      error: "INVALID_TOKENS",
+      message: "FCM tokens array is required and cannot be empty",
+    });
+  }
+
+  if (tokens.length > 1000) {
+    return res.status(400).json({
+      error: "TOO_MANY_TOKENS", 
+      message: "Maximum 1000 tokens allowed per request",
+    });
+  }
+
+  if (!title?.trim() || !body?.trim()) {
+    return res.status(400).json({
+      error: "MISSING_CONTENT",
+      message: "title and body are required and cannot be empty",
+    });
+  }
+
+  if (title.length > 200 || body.length > 1000) {
+    return res.status(400).json({
+      error: "CONTENT_TOO_LONG",
+      message: "title max 200 chars, body max 1000 chars",
+    });
+  }
+
+  next();
+};
 
 /**
  * Initialize Kafka producer
@@ -34,37 +81,42 @@ router.post("/kafka/start", async (req, res) => {
  *   data: {}
  * }
  */
-router.post("/kafka/send", async (req, res) => {
+router.post("/kafka/send", notificationLimiter, validateNotificationInput, async (req, res) => {
+  const startTime = Date.now();
   try {
-    const { tokens, title, body, data } = req.body;
+    const { tokens, title, body, data = {} } = req.body;
 
-    // 🔐 Basic validation
-    if (!tokens || !Array.isArray(tokens) || tokens.length === 0) {
-      return res.status(400).json({
-        message: "FCM tokens array is required",
-      });
-    }
-
-    if (!title || !body) {
-      return res.status(400).json({
-        message: "title and body are required",
-      });
-    }
+    console.log(`📬 Processing notification request: ${tokens.length} tokens, title: "${title}"`);
 
     await sendNotification({
       tokens,
-      title,
-      body,
+      title: title.trim(),
+      body: body.trim(),
       data,
     });
 
+    const duration = Date.now() - startTime;
+    console.log(`✅ Notification queued successfully in ${duration}ms`);
+
     res.status(200).json({
+      success: true,
       message: "Notification queued successfully",
+      tokenCount: tokens.length,
+      processingTimeMs: duration,
     });
   } catch (error) {
-    console.error("Error sending notification:", error);
+    const duration = Date.now() - startTime;
+    console.error("❌ Error sending notification:", {
+      error: error.message,
+      stack: error.stack,
+      processingTimeMs: duration,
+    });
+
     res.status(500).json({
+      success: false,
+      error: "NOTIFICATION_FAILED",
       message: "Failed to send notification",
+      ...(process.env.NODE_ENV === 'development' && { details: error.message }),
     });
   }
 });
