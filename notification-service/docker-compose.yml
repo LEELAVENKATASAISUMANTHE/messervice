@@ -4,11 +4,16 @@ services:
   redis:
     image: redis:7
     container_name: notification-redis
-    ports:
-      - "6379:6379"   # ⚠️ expose only if needed externally
     volumes:
       - redis-data:/data
-    command: ["redis-server", "--appendonly", "yes"]
+    command:
+      [
+        "redis-server",
+        "--appendonly", "yes",
+        "--save", "900", "1",
+        "--save", "300", "10",
+        "--save", "60", "10000"
+      ]
     restart: unless-stopped
     networks:
       - shared-backend-net
@@ -21,10 +26,8 @@ services:
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
-
       # 🔥 ADD THIS
       KAFKA_BROKERS: kafka:9092
-
     depends_on:
       - redis
     restart: unless-stopped
