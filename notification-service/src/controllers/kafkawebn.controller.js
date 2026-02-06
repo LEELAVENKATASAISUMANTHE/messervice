@@ -20,13 +20,11 @@ export const startKafkaProducer = async () => {
  * @param {string[]} payload.tokens - FCM tokens
  * @param {string} payload.title
  * @param {string} payload.body
- * @param {Object} payload.data - optional custom data
  */
 export const sendNotification = async ({
   tokens,
   title,
   body,
-  data = {},
 }) => {
   if (!tokens || !tokens.length) {
     throw new Error("FCM tokens are required");
@@ -36,7 +34,6 @@ export const sendNotification = async ({
     tokens,
     title,
     body,
-    data,
     timestamp: Date.now(),
   };
 

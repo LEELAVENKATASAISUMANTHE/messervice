@@ -77,14 +77,13 @@ router.post("/kafka/start", async (req, res) => {
  * {
  *   tokens: [],
  *   title: "",
- *   body: "",
- *   data: {}
+ *   body: ""
  * }
  */
 router.post("/kafka/send", notificationLimiter, validateNotificationInput, async (req, res) => {
   const startTime = Date.now();
   try {
-    const { tokens, title, body, data = {} } = req.body;
+    const { tokens, title, body } = req.body;
 
     console.log(`📬 Processing notification request: ${tokens.length} tokens, title: "${title}"`);
 
@@ -92,7 +91,6 @@ router.post("/kafka/send", notificationLimiter, validateNotificationInput, async
       tokens,
       title: title.trim(),
       body: body.trim(),
-      data,
     });
 
     const duration = Date.now() - startTime;
