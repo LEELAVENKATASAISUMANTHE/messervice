@@ -17,6 +17,7 @@
       volumes:
         - ./kafka.js:/app/kafka.js
       networks:
-        - erp-core-net
+        erp-core-net:
+         external: true
     
       
