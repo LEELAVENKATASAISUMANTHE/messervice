@@ -1,8 +1,6 @@
-version: "3.9"
-
 services:
   eligibility_service:
-    build: ./eligibility-service
+    build: .
     container_name: eligibility-service
     restart: unless-stopped
     environment:

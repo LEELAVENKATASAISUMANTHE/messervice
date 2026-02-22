@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const kafka = require('../kafka');
+const kafka = require('./kafka');
 const db = require('./db');
 
 const app = express();
