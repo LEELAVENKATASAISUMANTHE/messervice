@@ -17,4 +17,6 @@
       volumes:
         - ./kafka.js:/app/kafka.js
       networks:
-        - eligibility_network
+        - erp-core-net
+    
+      
