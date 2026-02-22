@@ -1,31 +1,35 @@
-name: Deploy Notification Service
+name: Deploy Eligibility Service
 
 on:
   push:
     branches:
-      - main   # change if needed
-  workflow_dispatch:  # Allows manual triggering from GitHub UI
+      - main
+    paths:
+      - "Eligibility Service/**"
+      - ".github/workflows/deploy-eligibility-service.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-eligibility-service
+  cancel-in-progress: true
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repository
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Copy project files to server
       - name: Copy files to server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "."
-          target: "/opt/notification-service"
+          source: "Eligibility Service"
+          target: "/opt/messervice"
 
-      # 3️⃣ SSH into server and deploy
       - name: Deploy with Docker Compose
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -33,6 +37,6 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            cd /opt/notification-service/notification-service
-            docker compose build backend
-            docker compose up -d backend  
+            set -e
+            cd "/opt/messervice/Eligibility Service"
+            docker compose up -d --build

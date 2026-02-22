@@ -1,0 +1,20 @@
+  services:
+    eligibility_service:
+      build: ./eligibility-service
+      container_name: eligibility-service
+      restart: unless-stopped
+      depends_on:
+        - redpanda
+        - postgres
+      environment:
+        - KAFKA_BROKERS=redpanda:9092
+        - DB_HOST=172.17.0.1
+        - DB_USER=admin
+        - DB_PASSWORD=sumanth123
+        - DB_NAME=placement
+        - DB_PORT=5432
+        - NODE_ENV=production
+      volumes:
+        - ./kafka.js:/app/kafka.js
+      networks:
+        - eligibility_network
