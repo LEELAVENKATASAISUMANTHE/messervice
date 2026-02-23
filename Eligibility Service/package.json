@@ -2,9 +2,9 @@
   "name": "eligibility-service",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
-    "start": "node eligibility-service/index.js"
+    "start": "node index.js"
   },
   "dependencies": {
     "express": "^4.18.2",
