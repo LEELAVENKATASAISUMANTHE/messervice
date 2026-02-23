@@ -1,5 +1,5 @@
 import pool from '../db/db.js';
-import consumer from './kafka.js';
+import { consumer } from './kafka.js';
 
 export const getmessage = async () => {
     try {
