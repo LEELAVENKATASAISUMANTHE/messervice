@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import { getmessage } from "./utils/main.js";
 import { connectMongo } from "./mongo.connection.js";
-import logger from "./logs/logger.js";
+import logger from "./logger.js";
 
 const app = express();
 app.use(bodyParser.json());

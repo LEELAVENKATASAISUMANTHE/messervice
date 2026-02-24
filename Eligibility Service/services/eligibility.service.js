@@ -1,7 +1,7 @@
 import { fetchstudent } from "../utils/studentfectch.js";
 import { Eligibility } from "../models/eligibility.model.js";
 import { EventLog } from "../models/eventlog.model.js";
-import logger from "../logs/logger.js";
+import logger from "../logger.js";
 
 export const processEligibility = async (validatedData) => {
   try {

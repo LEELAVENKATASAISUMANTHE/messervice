@@ -1,6 +1,6 @@
 import { consumer } from "./kafka.js";
 import { z } from "zod";
-import logger from "../logs/logger.js";
+import logger from "../logger.js";
 import { processEligibility } from "../services/eligibility.service.js";
 
 const jobCreatedSchema = z.object({
