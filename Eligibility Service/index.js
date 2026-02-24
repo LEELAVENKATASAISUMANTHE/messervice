@@ -2,7 +2,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { getmessage } from './utils/main.js';
-import { connectMongo } from './logs/mongo.connection.js';
+import { connectMongo } from "./mongo.connection.js";
 // import * as db from './db/db.js';
 
 
