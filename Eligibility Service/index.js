@@ -21,6 +21,8 @@ app.get('/health', (req, res) => {
 
 const PORT = process.env.PORT || 5789;
 app.listen(PORT, async () => {
+  console.log('Server is up and running');
+  console.log("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n");
   await connectMongo();
   await getmessage();
    // Start Kafka consumer cwhen the server starts
