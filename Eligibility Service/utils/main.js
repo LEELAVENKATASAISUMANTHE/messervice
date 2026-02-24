@@ -49,7 +49,8 @@ export const getmessage = async () => {
                    }
 
                     console.log("Message is valid according to schema.", parsdata);
-                        await fetchstudent(parsdata);
+                    const students = await fetchstudent(parsdata);
+                    console.log("Fetched students:", students.rows);
                 } catch (error) {
                     console.error("Schema validation error:", error.errors);
                     return; // Skip processing this message
