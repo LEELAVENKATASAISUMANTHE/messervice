@@ -18,8 +18,8 @@ const jobCreatedSchema = z.object({
     minExperienceYrs: z.number(),
     allowedBranches: z.array(z.string()),
     skillsRequired: z.string(),
-    additionalNotes: z.string(),
-    backlogsAllowed: z.number().nullable(),
+    additionalNotes: z.string().nullable(),
+    backlogsAllowed: z.number(),
   }),
   timestamp: z.string().datetime(),
 });
