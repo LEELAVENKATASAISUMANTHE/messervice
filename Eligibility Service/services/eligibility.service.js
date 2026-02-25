@@ -1,4 +1,4 @@
-import { fetchstudent } from "../utils/studentfectch.js";
+import { fetchApplicationDeadline, fetchstudent } from "../utils/studentfectch.js";
 import { Eligibility } from "../models/eligibility.model.js";
 import { EventLog } from "../models/eventlog.model.js";
 import logger from "../logger.js";
@@ -16,6 +16,7 @@ export const processEligibility = async (validatedData) => {
     logger.info("Fetching eligible students", { criteria });
 
     const students = await fetchstudent(criteria);
+    const applicationDeadline = await fetchApplicationDeadline(validatedData.jobId);
 
     const eligibilityRecord = await Eligibility.create({
       jobId: validatedData.jobId,
@@ -35,6 +36,7 @@ export const processEligibility = async (validatedData) => {
     logger.info("Eligibility processed successfully", {
       jobId: validatedData.jobId,
       eligibleCount: students.length,
+      applicationDeadline,
     });
 
     return {
@@ -43,6 +45,7 @@ export const processEligibility = async (validatedData) => {
       criteria,
       eligibleStudents: students,
       eligibleCount: students.length,
+      applicationDeadline,
       processedAt: eligibilityRecord.processedAt,
     };
 

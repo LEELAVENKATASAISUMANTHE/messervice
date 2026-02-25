@@ -25,3 +25,19 @@ export const fetchstudent = async (criteria) => {
         throw error;
     }
 };
+
+export const fetchApplicationDeadline = async (jobId) => {
+    try {
+        const queryText = `
+            SELECT application_deadline
+            FROM jobs
+            WHERE job_id = $1
+            LIMIT 1
+        `;
+        const result = await pool.query(queryText, [jobId]);
+        return result.rows[0]?.application_deadline ?? null;
+    } catch (error) {
+        console.error("Error fetching application deadline:", error);
+        throw error;
+    }
+};
