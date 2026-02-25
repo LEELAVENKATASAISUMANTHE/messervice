@@ -14,10 +14,13 @@ app.get("/health", (req, res) => {
 const PORT = process.env.PORT || 5789;
 
 app.listen(PORT, async () => {
-  logger.info("Server started");
-
-  await connectMongo();
-  await getmessage();
-
   logger.info(`Eligibility Service running on port ${PORT}`);
+
+  try {
+    await connectMongo();
+    await getmessage();
+  } catch (error) {
+    logger.error("Service startup failed", { error: error.message });
+    process.exit(1);
+  }
 });

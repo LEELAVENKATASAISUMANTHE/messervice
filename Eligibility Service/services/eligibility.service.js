@@ -17,7 +17,7 @@ export const processEligibility = async (validatedData) => {
 
     const students = await fetchstudent(criteria);
 
-    await Eligibility.create({
+    const eligibilityRecord = await Eligibility.create({
       jobId: validatedData.jobId,
       companyName: validatedData.companyName,
       criteria,
@@ -37,19 +37,35 @@ export const processEligibility = async (validatedData) => {
       eligibleCount: students.length,
     });
 
+    return {
+      jobId: validatedData.jobId,
+      companyName: validatedData.companyName,
+      criteria,
+      eligibleStudents: students,
+      eligibleCount: students.length,
+      processedAt: eligibilityRecord.processedAt,
+    };
+
   } catch (error) {
     logger.error("Eligibility processing failed", {
       jobId: validatedData?.jobId,
       error: error.message,
     });
 
-    await EventLog.create({
-      eventType: "JOB_CREATED",
-      jobId: validatedData?.jobId,
-      status: "FAILED",
-      message: error.message,
-      rawPayload: validatedData,
-    });
+    try {
+      await EventLog.create({
+        eventType: "JOB_CREATED",
+        jobId: validatedData?.jobId,
+        status: "FAILED",
+        message: error.message,
+        rawPayload: validatedData,
+      });
+    } catch (eventLogError) {
+      logger.error("Failed to save failure event log", {
+        jobId: validatedData?.jobId,
+        error: eventLogError.message,
+      });
+    }
 
     throw error;
   }
