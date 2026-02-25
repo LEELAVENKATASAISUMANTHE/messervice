@@ -58,20 +58,20 @@ export const getmessage = async () => {
 
           const eligibilityResult = await processEligibility(validatedData);
 
-          logger.info("Publishing event to Redpanda for notification send", {
+          logger.info("Publishing event to Redpanda for notification pending", {
             jobId: validatedData.jobId,
-            topic: TOPICS.JOB_NOTIFICATION_SEND,
+            topic: TOPICS.JOB_NOTIFICATION_PENDING,
           });
           console.log("Eligibility result:", eligibilityResult);
           console.log("--------------------------------------------------------------------");
-          console.log("Publishing event to Redpanda for notification send", {
+          console.log("Publishing event to Redpanda for notification pending", {
             jobId: validatedData.jobId,
-            topic: TOPICS.JOB_NOTIFICATION_SEND,
+            topic: TOPICS.JOB_NOTIFICATION_PENDING,
           });
           console.log("--------------------------------------------------------------------");
           console.log("\n \n \n \n \n \n \n \n \n \n \n \n \n");
 
-          await publishEvent(TOPICS.JOB_NOTIFICATION_SEND, eligibilityResult, {
+          await publishEvent(TOPICS.JOB_NOTIFICATION_PENDING, eligibilityResult, {
             key: validatedData.jobId,
             headers: {
               "content-type": "application/json"
@@ -80,9 +80,9 @@ export const getmessage = async () => {
             console.log("--------------------------------------------------------------------");
           console.log("\n \n \n \n \n \n \n \n \n \n \n \n \n");
 
-          logger.info("Event published to Redpanda for notification send", {
+          logger.info("Event published to Redpanda for notification pending", {
             jobId: validatedData.jobId,
-            topic: TOPICS.JOB_NOTIFICATION_SEND,
+            topic: TOPICS.JOB_NOTIFICATION_PENDING,
           });
 
           await consumer.commitOffsets([

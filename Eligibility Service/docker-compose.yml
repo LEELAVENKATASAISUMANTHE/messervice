@@ -17,3 +17,6 @@ services:
 networks:
   erp-core-net:
     external: true
+
+  redis-core-network:
+    external: true

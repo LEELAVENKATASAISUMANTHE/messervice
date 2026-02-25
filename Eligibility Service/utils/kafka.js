@@ -9,7 +9,8 @@ const brokers = (process.env.KAFKA_BROKERS || "redpanda:9092")
   JOB_READY: "job.ready",
   JOB_ELIGIBILITY: "job.eligibility",
   JOB_ELIGIBLE_STUDENTS: "job.eligible.students",
-  JOB_NOTIFICATION_SEND: "job.notification.send"
+    JOB_NOTIFICATION_SEND: "job.notification.send",
+    JOB_NOTIFICATION_PENDING: "job.notification.pending"
 };
 
 const kafka = new Kafka({
