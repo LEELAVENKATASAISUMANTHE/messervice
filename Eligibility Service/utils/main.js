@@ -58,11 +58,31 @@ export const getmessage = async () => {
 
           const eligibilityResult = await processEligibility(validatedData);
 
+          logger.info("Publishing event to Redpanda for notification send", {
+            jobId: validatedData.jobId,
+            topic: TOPICS.JOB_NOTIFICATION_SEND,
+          });
+          console.log("Eligibility result:", eligibilityResult);
+          console.log("--------------------------------------------------------------------");
+          console.log("Publishing event to Redpanda for notification send", {
+            jobId: validatedData.jobId,
+            topic: TOPICS.JOB_NOTIFICATION_SEND,
+          });
+          console.log("--------------------------------------------------------------------");
+          console.log("\n \n \n \n \n \n \n \n \n \n \n \n \n");
+
           await publishEvent(TOPICS.JOB_NOTIFICATION_SEND, eligibilityResult, {
             key: validatedData.jobId,
             headers: {
               "content-type": "application/json"
             }
+          });
+            console.log("--------------------------------------------------------------------");
+          console.log("\n \n \n \n \n \n \n \n \n \n \n \n \n");
+
+          logger.info("Event published to Redpanda for notification send", {
+            jobId: validatedData.jobId,
+            topic: TOPICS.JOB_NOTIFICATION_SEND,
           });
 
           await consumer.commitOffsets([
