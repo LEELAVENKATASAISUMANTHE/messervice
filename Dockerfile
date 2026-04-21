@@ -2,11 +2,11 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY ["Eligibility Service/package.json", "Eligibility Service/package-lock.json", "./"]
 
 RUN npm install --omit=dev
 
-COPY . .
+COPY ["Eligibility Service/", "./"]
 
 EXPOSE 5789
 
