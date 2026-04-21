@@ -11,3 +11,4 @@ COPY ["Eligibility Service/", "./"]
 EXPOSE 5789
 
 CMD ["node", "index.js"]
+
