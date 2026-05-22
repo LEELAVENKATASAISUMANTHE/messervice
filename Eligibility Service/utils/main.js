@@ -30,12 +30,12 @@ export const getmessage = async () => {
     await consumer.connect();
 
     await consumer.subscribe({
-      topic: TOPICS.JOB_ELIGIBILITY,
+      topic: TOPICS.JOB_ELIGIBILITY,//this the queue with the job details to check eligibility and send notification pending event
       fromBeginning: false,
     });
 
     logger.info("Kafka consumer subscribed to job.eligibility");
-
+    console.log("Kafka consumer subscribed to job.eligibility");
     await consumer.run({
       autoCommit: false,
 
@@ -53,6 +53,9 @@ export const getmessage = async () => {
             partition,
             offset: message.offset,
           });
+          conole.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+          console.log("Received Kafka message:", data);
+          console.log("--------------------------------------------------------------------");
 
           const validatedData = jobCreatedSchema.parse(data);
 
