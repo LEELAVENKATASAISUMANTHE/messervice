@@ -53,7 +53,8 @@ export const getmessage = async () => {
             partition,
             offset: message.offset,
           });
-          conole.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+          console.log("your are testing here");
+          console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
           console.log("Received Kafka message:", data);
           console.log("--------------------------------------------------------------------");
 
