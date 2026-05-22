@@ -1,5 +1,4 @@
 import { Kafka } from "kafkajs";
-import logger from "../logger.js";
 
 const brokers = (process.env.KAFKA_BROKERS || "redpanda:9092")
   .split(",")
@@ -36,9 +35,9 @@ export async function initKafka() {
   try {
     await producer.connect();
     producerConnected = true;
-    logger.info("Kafka producer connected");
+    console.log("Kafka producer connected");
   } catch (err) {
-    logger.error("Kafka producer connection failed", { error: err.message });
+    console.error("Kafka producer connection failed", { error: err.message });
     throw err;
   }
 }
@@ -63,10 +62,10 @@ export async function sendMessage(topic, message, options = {}) {
       ]
     });
 
-    logger.info(`Message sent to ${topic}`, { metadata });
+    console.log(`Message sent to ${topic}`, { metadata });
     return metadata;
   } catch (err) {
-    logger.error(`Failed to send message to ${topic}`, {
+    console.error(`Failed to send message to ${topic}`, {
       error: err.message
     });
     throw err;

@@ -1,6 +1,5 @@
 import { consumer, initKafka, publishEvent, TOPICS } from "./kafka.js";
 import { z } from "zod";
-import logger from "../logger.js";
 import { processEligibility } from "../services/eligibility.service.js";
 
 const jobCreatedSchema = z.object({
@@ -34,7 +33,6 @@ export const getmessage = async () => {
       fromBeginning: false,
     });
 
-    logger.info("Kafka consumer subscribed to job.eligibility");
     console.log("Kafka consumer subscribed to job.eligibility");
     await consumer.run({
       autoCommit: false,
@@ -47,7 +45,7 @@ export const getmessage = async () => {
 
           const data = JSON.parse(message.value.toString());
 
-          logger.info("Received Kafka message", {
+          console.log("Received Kafka message", {
             jobId: data.jobId,
             topic,
             partition,
@@ -62,7 +60,7 @@ export const getmessage = async () => {
 
           const eligibilityResult = await processEligibility(validatedData);
 
-          logger.info("Publishing event to Redpanda for notification pending", {
+          console.log("Publishing event to Redpanda for notification pending", {
             jobId: validatedData.jobId,
             topic: TOPICS.JOB_NOTIFICATION_PENDING,
           });
@@ -84,7 +82,7 @@ export const getmessage = async () => {
             console.log("--------------------------------------------------------------------");
           console.log("\n \n \n \n \n \n \n \n \n \n \n \n \n");
 
-          logger.info("Event published to Redpanda for notification pending", {
+          console.log("Event published to Redpanda for notification pending", {
             jobId: validatedData.jobId,
             topic: TOPICS.JOB_NOTIFICATION_PENDING,
           });
@@ -97,7 +95,7 @@ export const getmessage = async () => {
             },
           ]);
 
-          logger.info("Offset committed", {
+          console.log("Offset committed", {
             jobId: validatedData.jobId,
             topic,
             partition,
@@ -108,7 +106,7 @@ export const getmessage = async () => {
           const isNonRetryable =
             error instanceof SyntaxError || error instanceof z.ZodError;
 
-          logger.error("Kafka message processing failed", {
+          console.error("Kafka message processing failed", {
             error: error.message,
             topic,
             partition,
@@ -125,7 +123,7 @@ export const getmessage = async () => {
               },
             ]);
 
-            logger.warn("Invalid message skipped and offset committed", {
+            console.warn("Invalid message skipped and offset committed", {
               topic,
               partition,
               offset: message.offset,
@@ -135,7 +133,7 @@ export const getmessage = async () => {
       },
     });
   } catch (error) {
-    logger.error("Kafka consumer initialization error", {
+    console.error("Kafka consumer initialization error", {
       error: error.message,
     });
     throw error;

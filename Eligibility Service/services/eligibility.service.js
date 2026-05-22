@@ -1,7 +1,6 @@
 import { fetchApplicationDeadline, fetchstudent } from "../utils/studentfectch.js";
 import { Eligibility } from "../models/eligibility.model.js";
 import { EventLog } from "../models/eventlog.model.js";
-import logger from "../logger.js";
 
 export const processEligibility = async (validatedData) => {
   try {
@@ -13,7 +12,7 @@ export const processEligibility = async (validatedData) => {
       allowedBranches: validatedData.jobRequirements.allowedBranches,
     };
 
-    logger.info("Fetching eligible students", { criteria });
+    console.log("Fetching eligible students", { criteria });
 
     const students = await fetchstudent(criteria);
     const applicationDeadline = await fetchApplicationDeadline(validatedData.jobId);
@@ -33,7 +32,7 @@ export const processEligibility = async (validatedData) => {
       rawPayload: validatedData,
     });
 
-    logger.info("Eligibility processed successfully", {
+    console.log("Eligibility processed successfully", {
       jobId: validatedData.jobId,
       eligibleCount: students.length,
       applicationDeadline,
@@ -50,7 +49,7 @@ export const processEligibility = async (validatedData) => {
     };
 
   } catch (error) {
-    logger.error("Eligibility processing failed", {
+    console.error("Eligibility processing failed", {
       jobId: validatedData?.jobId,
       error: error.message,
     });
@@ -64,7 +63,7 @@ export const processEligibility = async (validatedData) => {
         rawPayload: validatedData,
       });
     } catch (eventLogError) {
-      logger.error("Failed to save failure event log", {
+      console.error("Failed to save failure event log", {
         jobId: validatedData?.jobId,
         error: eventLogError.message,
       });

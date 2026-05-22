@@ -1,5 +1,4 @@
 import { pool } from "../db/db.js";
-import logger from "../logger.js";
 
 export const fetchstudent = async (criteria) => {
     try {
@@ -10,9 +9,6 @@ export const fetchstudent = async (criteria) => {
         const queryText = `
            SELECT s.student_id,
             CONCAT_WS(' ', s.first_name, s.middle_name, s.last_name) AS complete_name,
-            s.first_name,
-            s.middle_name,
-            s.last_name,
             s.branch,
             s.graduation_year,
             s.semester,
@@ -65,7 +61,7 @@ export const fetchstudent = async (criteria) => {
                 allowedBranches
             ]);
 
-            logger.warn("No eligible students matched criteria", {
+            console.warn("No eligible students matched criteria", {
                 criteria: {
                     ...criteria,
                     allowedBranches
